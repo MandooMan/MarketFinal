@@ -14,6 +14,7 @@ import {
 } from '../constants/productConstants';
 
 export default function ProductListScreen(props) {
+  
   const { pageNumber = 1 } = useParams();
 
   const sellerMode = props.match.path.indexOf('/seller') >= 0;

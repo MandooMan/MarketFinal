@@ -20,7 +20,7 @@ export default function CartScreen(props) {
   };
 
   const checkoutHandler = () => {
-    props.history.push('/signin?redirect=shipping');
+    props.history.push('/signin?redirect=chat');
   };
 
   return (
@@ -77,7 +77,7 @@ export default function CartScreen(props) {
                 className="primary block"
                 disabled={cartItems.length === 0}
               >
-                Proceed to Checkout
+                Chat with Buyer
               </button>
             </li>
           </ul>

@@ -12,6 +12,12 @@ import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
+import UserListScreen from './screens/UserListScreen';
+import UserEditScreen from './screens/UserEditScreen';
+import SellerRoute from './components/SellerRoute';
+import SellerScreen from './screens/SellerScreen';
+import SearchBox from './components/SearchBox';
+import SearchScreen from './screens/SearchScreen';
 
 function App() {
   const cart = useSelector((state) => state.cart);
@@ -34,9 +40,13 @@ function App() {
           </Link>
         </div>
 
-        <div className="header_search">
-                   <input className="header_searchInput" type="text" ></input>          
-        </div>
+        <div>
+            <Route
+              render={({ history }) => (
+                <SearchBox history={history}></SearchBox>
+              )}
+            ></Route>
+          </div>
 
         <div>
             <div className="header_nav">
@@ -45,7 +55,7 @@ function App() {
                        <Link to="sell.html"><img className="sell_logo" src="/images/KakaoTalk_20210404_181730390.png" alt="SellLogo"/></Link>
                    </span>
                    <span className='header_optionLine2'>
-                       Sell Product
+                    <Link to="/productlist/seller">Sell</Link>
                    </span>
                </div>
 
@@ -76,9 +86,6 @@ function App() {
                           <Link to="/profile">User Profile</Link>
                         </li>
                         <li>
-                          <Link to="/orderhistory">History</Link>
-                        </li>
-                        <li>
                           <Link to="#signout" onClick={signoutHandler}>
                             Sign Out
                           </Link>
@@ -88,6 +95,18 @@ function App() {
                   ) : (
                     <Link to="/signin">Sign In</Link>
                   )}
+                              {userInfo && userInfo.isSeller && (
+              <div className="dropdown">
+                <Link to="#admin">
+                  Seller <i className="fa fa-caret-down"></i>
+                </Link>
+                <ul className="dropdown-content">
+                  <li>
+                    <Link to="/productlist/seller">Products</Link>
+                  </li>
+                </ul>
+              </div>
+            )}
                               {userInfo && userInfo.isAdmin && (
               <div className="dropdown">
                 <Link to="#admin">
@@ -99,9 +118,6 @@ function App() {
                   </li>
                   <li>
                     <Link to="/productlist">Products</Link>
-                  </li>
-                  <li>
-                    <Link to="/orderlist">Orders</Link>
                   </li>
                   <li>
                     <Link to="/userlist">Users</Link>
@@ -122,6 +138,12 @@ function App() {
         <Route path="/" component={HomeScreen} exact></Route>
         <Route path="/signin" component={SigninScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
+        <AdminRoute path="/userlist" component={UserListScreen}></AdminRoute>
+        <Route
+            path="/search/name/:name?"
+            component={SearchScreen}
+            exact
+          ></Route>
         <PrivateRoute
             path="/profile"
             component={ProfileScreen}
@@ -129,12 +151,22 @@ function App() {
         <AdminRoute
             path="/productlist"
             component={ProductListScreen}
+            exact
         ></AdminRoute>
         <Route
             path="/product/:id/edit"
             component={ProductEditScreen}
             exact
         ></Route>
+        <AdminRoute
+          path="/user/:id/edit"
+          component={UserEditScreen}
+        ></AdminRoute>
+                  <SellerRoute
+            path="/productlist/seller"
+            component={ProductListScreen}
+          ></SellerRoute>
+        <Route path="/seller/:id" component={SellerScreen}></Route>
       </main>
       <footer className="row center">All right reserved</footer>
     </div>

@@ -13,7 +13,14 @@ export default function Product(props) {
           <h2>{product.name}</h2>
         </Link>
         <div className="price">${product.price}</div>
-        <div className="status">{product.status}</div>
+        <div className="row">
+          <div className="status">${product.status}</div>
+          <div>
+            <Link to={`/seller/${product.seller._id}`}>
+              {product.seller.seller.name}
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

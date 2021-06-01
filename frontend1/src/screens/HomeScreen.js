@@ -25,7 +25,7 @@ export default function HomeScreen(props) {
       dispatch({ type: PRODUCT_CREATE_RESET });
       props.history.push(`/product/${createdProduct._id}/edit`);
     }
-    dispatch(listProducts());
+    dispatch(listProducts({}));
   }, [createdProduct, dispatch, props.history, successCreate]);
 
   const createHandler = () => {
