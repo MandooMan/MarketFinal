@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import {
@@ -12,14 +12,25 @@ import {
   PRODUCT_CREATE_RESET,
   PRODUCT_DELETE_RESET,
 } from '../constants/productConstants';
+import { detailsUser, updateUserProfile } from '../actions/userActions';
 
 export default function ProductListScreen(props) {
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [sellerName, setSellerName] = useState('');
+  const [sellerLogo, setSellerLogo] = useState('');
+  const [sellerDescription, setSellerDescription] = useState('');
   
   const { pageNumber = 1 } = useParams();
 
   const sellerMode = props.match.path.indexOf('/seller') >= 0;
   const productList = useSelector((state) => state.productList);
+  const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, products, page, pages } = productList;
+  const { user } = userDetails;
 
   const productCreate = useSelector((state) => state.productCreate);
   const {
@@ -39,6 +50,17 @@ export default function ProductListScreen(props) {
   const { userInfo } = userSignin;
   const dispatch = useDispatch();
   useEffect(() => {
+    if (!user) {
+      dispatch(detailsUser(userInfo._id));
+    } else {
+      setName(user.name);
+      setEmail(user.email);
+      if (user.seller) {
+        setSellerName(user.seller.name);
+        setSellerLogo(user.seller.logo);
+        setSellerDescription(user.seller.description);
+      }
+    }
     if (successCreate) {
       dispatch({ type: PRODUCT_CREATE_RESET });
       props.history.push(`/product/${createdProduct._id}/edit`);
@@ -66,7 +88,12 @@ export default function ProductListScreen(props) {
     }
   };
   const createHandler = () => {
-    dispatch(createProduct());
+    if (user.seller.name){
+      dispatch(createProduct());
+    }
+    else {
+      dispatch(createProduct());
+    }
   };
   return (
     <div>
